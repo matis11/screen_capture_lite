@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.6)
 project(screen_capture_lite)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-option(BUILD_SHARED_LIBS "Build shared library" OFF) 
-option(BUILD_EXAMPLE "Build example" ON)
+option(BUILD_SHARED_LIBS "Build shared library" ON)
+option(BUILD_EXAMPLE "Build example" OFF)
 
 if(MSVC)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
@@ -118,3 +118,21 @@ install (FILES
 if(BUILD_EXAMPLE)
   add_subdirectory(Example)
 endif()
+
+set(SCREEN_CAPTURE_LIB
+		${PROJECT_NAME}
+		CACHE INTERNAL "${PROJECT_NAME}: Include Libraries" FORCE
+		)
+
+message(STATUS ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+
+set(SCREEN_CAPTURE_INCLUDE_DIRS
+		${CMAKE_CURRENT_SOURCE_DIR}/include
+		${CMAKE_CURRENT_SOURCE_DIR}/src
+		${SCREEN_CAPTURE_PLATFORM_INC}
+		CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE
+		)
+
+include_directories(${SCREEN_CAPTURE_INCLUDE_DIRS})
+
+target_link_libraries(${PROJECT_NAME} ${SCREEN_CAPTURE_PLATFORM_LIBS})
